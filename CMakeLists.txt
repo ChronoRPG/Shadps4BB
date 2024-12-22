@@ -908,9 +908,10 @@ if (ENABLE_DISCORD_RPC)
     target_compile_definitions(shadps4 PRIVATE ENABLE_DISCORD_RPC)
 endif()
 
-#if (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
-    #target_compile_definitions(shadps4 PRIVATE ENABLE_USERFAULTFD)
-#endif()
+# Optional due to https://github.com/shadps4-emu/shadPS4/issues/1704
+if (${CMAKE_SYSTEM_NAME} STREQUAL "Linux" AND ENABLE_USERFAULTFD)
+    target_compile_definitions(shadps4 PRIVATE ENABLE_USERFAULTFD)
+endif()
 
 if (APPLE)
   if (ENABLE_QT_GUI)
