@@ -64,6 +64,8 @@ static bool vkCrashDiagnostic = false;
 static s16 cursorState = HideCursorState::Idle;
 static int cursorHideTimeout = 5; // 5 seconds (default)
 static bool separateupdatefolder = false;
+static bool compatibilityData = false;
+static bool checkCompatibilityOnStartup = false;
 
 // Gui
 std::vector<std::filesystem::path> settings_install_dirs = {};
@@ -228,6 +230,14 @@ bool getSeparateUpdateEnabled() {
     return separateupdatefolder;
 }
 
+bool getCompatibilityEnabled() {
+    return compatibilityData;
+}
+
+bool getCheckCompatibilityOnStartup() {
+    return checkCompatibilityOnStartup;
+}
+
 void setGpuId(s32 selectedGpuId) {
     gpuId = selectedGpuId;
 }
@@ -346,6 +356,14 @@ void setSpecialPadClass(int type) {
 
 void setSeparateUpdateEnabled(bool use) {
     separateupdatefolder = use;
+}
+
+void setCompatibilityEnabled(bool use) {
+    compatibilityData = use;
+}
+
+void setCheckCompatibilityOnStartup(bool use) {
+    checkCompatibilityOnStartup = use;
 }
 
 void setMainWindowGeometry(u32 x, u32 y, u32 w, u32 h) {
@@ -550,6 +568,9 @@ void load(const std::filesystem::path& path) {
         isShowSplash = toml::find_or<bool>(general, "showSplash", true);
         isAutoUpdate = toml::find_or<bool>(general, "autoUpdate", false);
         separateupdatefolder = toml::find_or<bool>(general, "separateUpdateEnabled", false);
+        compatibilityData = toml::find_or<bool>(general, "compatibilityEnabled", false);
+        checkCompatibilityOnStartup =
+            toml::find_or<bool>(general, "checkCompatibilityOnStartup", false);
     }
 
     if (data.contains("Input")) {
@@ -662,6 +683,8 @@ void save(const std::filesystem::path& path) {
     data["General"]["showSplash"] = isShowSplash;
     data["General"]["autoUpdate"] = isAutoUpdate;
     data["General"]["separateUpdateEnabled"] = separateupdatefolder;
+    data["General"]["compatibilityEnabled"] = compatibilityData;
+    data["General"]["checkCompatibilityOnStartup"] = checkCompatibilityOnStartup;
     data["Input"]["cursorState"] = cursorState;
     data["Input"]["cursorHideTimeout"] = cursorHideTimeout;
     data["Input"]["backButtonBehavior"] = backButtonBehavior;
@@ -781,6 +804,8 @@ void setDefaultValues() {
     m_language = 1;
     gpuId = -1;
     separateupdatefolder = false;
+    compatibilityData = false;
+    checkCompatibilityOnStartup = false;
 }
 
 constexpr std::string_view GetDefaultKeyboardConfig() {
