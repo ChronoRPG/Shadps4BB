@@ -409,15 +409,6 @@ void PatchTextureBufferInstruction(IR::Block& block, IR::Inst& inst, Info& info,
     IR::IREmitter ir{block, IR::Block::InstructionList::s_iterator_to(inst)};
     inst.SetArg(0, ir.Imm32(binding));
     ASSERT(!buffer.swizzle_enable && !buffer.add_tid_enable);
-
-    // Apply dst_sel swizzle on formatted buffer instructions
-    if (inst.GetOpcode() == IR::Opcode::StoreBufferFormatF32) {
-        inst.SetArg(2, SwizzleVector(ir, buffer, inst.Arg(2)));
-    } else {
-        const auto inst_info = inst.Flags<IR::BufferInstInfo>();
-        const auto texel = ir.LoadBufferFormat(inst.Arg(0), inst.Arg(1), inst_info);
-        inst.ReplaceUsesWith(SwizzleVector(ir, buffer, texel));
-    }
 }
 
 IR::Value PatchCubeCoord(IR::IREmitter& ir, const IR::Value& s, const IR::Value& t,
@@ -764,10 +755,6 @@ void PatchImageInstruction(IR::Block& block, IR::Inst& inst, Info& info, Descrip
         }
     }();
     inst.SetArg(1, coords);
-
-    if (inst.GetOpcode() == IR::Opcode::ImageWrite) {
-        inst.SetArg(4, SwizzleVector(ir, image, inst.Arg(4)));
-    }
 
     if (inst_info.has_lod) {
         ASSERT(inst.GetOpcode() == IR::Opcode::ImageRead ||
