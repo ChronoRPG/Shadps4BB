@@ -212,6 +212,7 @@ SettingsDialog::SettingsDialog(std::span<const QString> physical_devices,
         ui->enableCompatibilityCheckBox->installEventFilter(this);
         ui->checkCompatibilityOnStartupCheckBox->installEventFilter(this);
         ui->updateCompatibilityButton->installEventFilter(this);
+        ui->audioBackendComboBox->installEventFilter(this);
 
         // Input
         ui->hideCursorGroupBox->installEventFilter(this);
@@ -306,6 +307,8 @@ void SettingsDialog::LoadValuesFromConfig() {
         toml::find_or<bool>(data, "General", "compatibilityEnabled", false));
     ui->checkCompatibilityOnStartupCheckBox->setChecked(
         toml::find_or<bool>(data, "General", "checkCompatibilityOnStartup", false));
+    ui->audioBackendComboBox->setCurrentText(
+        QString::fromStdString(toml::find_or<std::string>(data, "Audio", "backend", "cubeb")));
 
 #ifdef ENABLE_UPDATER
     ui->updateCheckBox->setChecked(toml::find_or<bool>(data, "General", "autoUpdate", false));
@@ -431,6 +434,8 @@ void SettingsDialog::updateNoteTextEdit(const QString& elementName) {
         text = tr("checkCompatibilityOnStartupCheckBox");
     } else if (elementName == "updateCompatibilityButton") {
         text = tr("updateCompatibilityButton");
+    } else if (elementName == "audioBackendGroupBox") {
+        text = tr("audioBackendGroupBox");
     }
 
     // Input
@@ -546,6 +551,7 @@ void SettingsDialog::UpdateSettings() {
     Config::setUpdateChannel(ui->updateComboBox->currentText().toStdString());
     Config::setCompatibilityEnabled(ui->enableCompatibilityCheckBox->isChecked());
     Config::setCheckCompatibilityOnStartup(ui->checkCompatibilityOnStartupCheckBox->isChecked());
+    Config::setAudioBackend(ui->audioBackendComboBox->currentText().toStdString());
 
 #ifdef ENABLE_DISCORD_RPC
     auto* rpc = Common::Singleton<DiscordRPCHandler::RPC>::Instance();
