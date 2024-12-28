@@ -69,7 +69,9 @@ void BufferCache::InvalidateMemory(VAddr device_addr, u64 size) {
         current_mutex = slot_buffer_mutex_map[buffer_id].get();
     }
     std::scoped_lock lk{*current_mutex};
-
+    const bool is_tracked = IsRegionRegistered(device_addr, size);
+    if (!is_tracked) {
+        return;
     if (!IsRegionRegistered(device_addr, size)) {
         return; // Skip if not tracked
     }
