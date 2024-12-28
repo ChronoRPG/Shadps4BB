@@ -590,8 +590,8 @@ void BufferCache::ChangeRegister(BufferId buffer_id) {
     }
 }
 
-void BufferCache::SynchronizeBuffer(Buffer& buffer, std::mutex& buffer_mutex, VAddr device_addr, u32 size, 
-                                    bool is_texel_buffer) {
+void BufferCache::SynchronizeBuffer(Buffer& buffer, std::mutex& buffer_mutex, VAddr device_addr,
+                                    u32 size, bool is_texel_buffer) {
     std::scoped_lock lk{buffer_mutex};
     boost::container::small_vector<vk::BufferCopy, 4> copies;
     u64 total_size_bytes = 0;
