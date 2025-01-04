@@ -301,7 +301,7 @@ bool PipelineCache::RefreshGraphicsKey() {
     key.cull_mode = regs.polygon_control.CullingMode();
     key.clip_space = regs.clipper_control.clip_space;
     key.front_face = regs.polygon_control.front_face;
-    key.num_samples = regs.NumSamples();
+    key.num_samples = regs.aa_config.NumSamples();
 
     const bool skip_cb_binding =
         regs.color_control.mode == AmdGpu::Liverpool::ColorControl::OperationMode::Disable;
@@ -371,6 +371,22 @@ bool PipelineCache::RefreshGraphicsKey() {
         }
 
         if (ShouldSkipShader(bininfo.shader_hash, "graphics")) {
+            return false;
+        }
+
+        // Shader skips for God of War III Remastered
+        // White screen issue.
+        if (bininfo.shader_hash == 0x394ef85fcecf26dd) {
+            return false;
+        }
+
+        // Texture flickering issue.
+        if (bininfo.shader_hash == 0xccdebd80d1b8f55c) {
+            return false;
+        }
+
+        // White color glitches issue.
+        if (bininfo.shader_hash == 0x5ef487a5facae08f) {
             return false;
         }
 
