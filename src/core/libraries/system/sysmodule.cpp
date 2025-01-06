@@ -10,6 +10,7 @@
 #include "core/libraries/libs.h"
 #include "core/libraries/system/sysmodule.h"
 #include "core/libraries/system/system_error.h"
+#include "constants.h"
 
 namespace Libraries::SysModule {
 
