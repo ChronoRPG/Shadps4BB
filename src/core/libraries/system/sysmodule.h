@@ -1,5 +1,16 @@
 // SPDX-FileCopyrightText: Copyright 2024 shadPS4 Emulator Project
 // SPDX-License-Identifier: GPL-2.0-or-later
+// sysmodule.h
+
+#ifndef ORBIS_OK
+#define ORBIS_OK 0
+#endif
+
+#ifndef ORBIS_SYSMODULE_SAVE_DATA_DIALOG
+#define ORBIS_SYSMODULE_SAVE_DATA_DIALOG 0x02 // Valor de ejemplo
+#endif
+
+// Otros encabezados y definiciones
 
 #pragma once
 
