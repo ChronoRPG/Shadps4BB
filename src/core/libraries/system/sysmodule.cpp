@@ -42,7 +42,8 @@ int PS4_SYSV_ABI sceSysmoduleIsLoaded(OrbisSysModule id) {
     }
 
     // Simulación específica para ORBIS_SYSMODULE_SAVE_DATA_DIALOG
-    if (id == ORBIS_SYSMODULE_SAVE_DATA_DIALOG) {
+    constexpr OrbisSysModule SAVE_DATA_DIALOG = ORBIS_SYSMODULE_SAVE_DATA_DIALOG;
+    if (id == SAVE_DATA_DIALOG) {
         LOG_INFO(Lib_SysModule, "Simulating ORBIS_SYSMODULE_SAVE_DATA_DIALOG as loaded.");
         return ORBIS_OK; // Indicar que el módulo está "cargado"
     }
@@ -60,7 +61,6 @@ int PS4_SYSV_ABI sceSysmoduleIsLoadedInternal(OrbisSysModuleInternal id) {
 }
 
 int PS4_SYSV_ABI sceSysmoduleLoadModule(OrbisSysModule id) {
-    auto color_name = magic_enum::enum_name(id);
     LOG_ERROR(Lib_SysModule, "(DUMMY) called module = {}", magic_enum::enum_name(id));
     return ORBIS_OK;
 }
