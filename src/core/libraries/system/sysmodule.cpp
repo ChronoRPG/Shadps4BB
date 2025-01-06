@@ -35,17 +35,18 @@ int PS4_SYSV_ABI sceSysmoduleIsCameraPreloaded() {
 
 int PS4_SYSV_ABI sceSysmoduleIsLoaded(OrbisSysModule id) {
     LOG_ERROR(Lib_SysModule, "(DUMMY) called module = {}", magic_enum::enum_name(id));
+
     if (static_cast<u16>(id) == 0) {
         LOG_ERROR(Lib_SysModule, "Invalid sysmodule ID: {:#x}", static_cast<u16>(id));
         return ORBIS_SYSMODULE_INVALID_ID;
-
-           }
+    }
 
     // Simulación específica para ORBIS_SYSMODULE_SAVE_DATA_DIALOG
     if (id == ORBIS_SYSMODULE_SAVE_DATA_DIALOG) {
         LOG_INFO(Lib_SysModule, "Simulating ORBIS_SYSMODULE_SAVE_DATA_DIALOG as loaded.");
         return ORBIS_OK; // Indicar que el módulo está "cargado"
     }
+
     return ORBIS_OK;
 }
 
